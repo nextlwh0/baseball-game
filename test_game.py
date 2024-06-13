@@ -9,13 +9,13 @@ class TestGame(TestCase):
         self.game = Game()
 
         super().setUp()
+
     def assert_illegal_argument(self, guessNumber):
         try:
             self.game.guess(guessNumber)
             self.fail()
         except TypeError:
             pass
-
 
     def test_exception_when_input_length_is_unmatched(self):
         self.assert_illegal_argument(None)
@@ -31,15 +31,19 @@ class TestGame(TestCase):
 
     def generate_question(self, question_number):
         self.game.question = question_number
+
     def test_return_solve_result_if_matched_number(self):
         self.generate_question("123")
         result: GameResult = self.game.guess("123")
 
         self.assert_matched_number(result, True, 3, 0)
 
-
     def test_return_solve_result_if_unmatched_number(self):
         self.generate_question("123")
         result: GameResult = self.game.guess("456")
 
         self.assert_matched_number(result, False, 0, 0)
+
+    def test_return_solve_result_if_some_matched_number(self):
+        self.generate_question("123")
+        self.assert_matched_number(self.game.guess("120"), False, 2, 0)
